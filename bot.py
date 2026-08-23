@@ -42,7 +42,6 @@ async def on_ready():
 
 
 # 3. 슬래시 명령어: /도배 [반복횟수] [보낼메시지]
-# (에러를 일으키던 contexts와 integration_types 설정을 제거하여 안정적으로 작동하게 수정했습니다)
 @bot.tree.command(
     name="도배", description="원하는 메시지를 지정한 횟수만큼 반복해서 보냅니다."
 )
@@ -57,23 +56,16 @@ async def dobai(interaction: discord.Interaction, count: int, message: str):
     )
     return
 
-  # 상호작용 응답 완료 처리
+  # 상호작용 응답 완료 처리 (나한테만 몰래 뜨는 메시지)
   await interaction.response.send_message(
       f"'{message}' 메시지를 {count}번 보냅니다!", ephemeral=True
   )
 
-  # 반복해서 메시지 전송 (쿨타임 방지)
+  # 반복해서 입력한 텍스트만 그대로 전송 (쿨타임 방지 딜레이 포함)
   try:
-    for i in range(count):
-      embed = discord.Embed(
-          title="📢 반복 메시지 알림",
-          description=message,
-          color=discord.Color.blue(),
-      )
-      embed.set_footer(text=f"전송 횟수: {i + 1} / {count}")
-
-      await interaction.channel.send(embed=embed)
-      await asyncio.sleep(0.6)  # 쿨타임 방지 딜레이
+    for _ in range(count):
+      await interaction.channel.send(message)
+      await asyncio.sleep(0.6)  # 디스코드 속도 제한(쿨타임) 방지
   except Exception as e:
     print(e)
 
