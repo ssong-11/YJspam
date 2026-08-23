@@ -4,9 +4,9 @@ from threading import Thread
 import discord
 from discord import app_commands
 from discord.ext import commands
-from flask import Flask  # 👈 소문자 f로 수정 완료!
+from flask import Flask
 
-# 1. 24시간 깨워두기 위한 웹서버 (Render용)
+# 1. 24시간 깨워두기 위한 웹서버
 app = Flask('')
 
 
@@ -47,10 +47,6 @@ async def on_ready():
 )
 @app_commands.describe(
     count="반복할 횟수 (1~100 사이)", message="보낼 메시지 내용"
-)
-@app_commands.integration_types(
-    guild_install=True,  # 서버 설치 허용
-    user_install=True    # 내 계정(User) 설치 허용
 )
 async def dobai(interaction: discord.Interaction, count: int, message: str):
     # 100회 초과 제한
