@@ -4,7 +4,7 @@ from threading import Thread
 import discord
 from discord import app_commands
 from discord.ext import commands
-from flask import Flask
+from Flask import Flask
 
 # 1. 24시간 깨워두기 위한 웹서버 (Render용)
 app = Flask('')
@@ -48,11 +48,7 @@ async def on_ready():
 @app_commands.describe(
     count="반복할 횟수 (1~100 사이)", message="보낼 메시지 내용"
 )
-@app_commands.contexts(
-    guild=True,          # 서버 허용
-    dm_channel=True,     # DM 허용
-    private_channel=True # 그룹 DM 허용
-)
+# ❌ 에러를 일으키던 contexts 데코레이터는 제거했습니다!
 @app_commands.integration_types(
     guild_install=True,  # 서버 설치 허용
     user_install=True    # 내 계정(User) 설치 허용
@@ -65,14 +61,14 @@ async def dobai(interaction: discord.Interaction, count: int, message: str):
         )
         return
 
-    # 응답 대기 상태로 변경 (타임아웃 방지 및 에러 예방)
+    # 응답 대기 상태로 변경
     await interaction.response.defer(ephemeral=True)
 
     # 반복해서 메시지 전송 시도
     try:
         for _ in range(count):
             await interaction.channel.send(message)
-            await asyncio.sleep(0.6)  # 디스코드 속도 제한(쿨타임) 방지
+            await asyncio.sleep(0.6)  # 디스코드 속도 제한 방지
             
         # 완료 후 나에게만 몰래 완료 메시지 전송
         await interaction.followup.send(f"'{message}' 메시지를 {count}번 보냈습니다!", ephemeral=True)
