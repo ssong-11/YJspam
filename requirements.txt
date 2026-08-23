@@ -1,2 +1,2 @@
-discord.py[voice]>=2.5.0
-flask
+discord.py>=2.4.0
+Flask
