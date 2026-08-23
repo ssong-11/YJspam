@@ -48,6 +48,16 @@ async def on_ready():
 @app_commands.describe(
     count="반복할 횟수 (1~100 사이)", message="보낼 메시지 내용"
 )
+# 👇 이 부분이 있어야 개인 DM(갠디) 창에서도 명령어가 뜹니다!
+@app_commands.contexts(
+    guild=True,          # 서버 허용
+    dm_channel=True,     # DM 허용
+    private_channel=True # 그룹 DM 허용
+)
+@app_commands.integration_types(
+    guild_install=True,  # 서버 설치 허용
+    user_install=True    # 내 계정(User) 설치 허용
+)
 async def dobai(interaction: discord.Interaction, count: int, message: str):
   # 100회 초과 제한
   if count > 100:
