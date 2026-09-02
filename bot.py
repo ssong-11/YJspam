@@ -76,5 +76,6 @@ async def dobai(interaction: discord.Interaction, count: int, message: str):
 # 4. 봇 실행
 if __name__ == "__main__":
     keep_alive()
-    token = os.environ.get("TOKEN")
+token = os.getenv("TOKEN")
+print("TOKEN 존재 여부:", token is not None)
     bot.run(token)
